@@ -1,6 +1,4 @@
 import streamlit as st
-import sys
-import os
 from datetime import datetime
 import pytz
 
