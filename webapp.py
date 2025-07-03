@@ -91,7 +91,7 @@ def main():
 
             # Use session state to persist table edits
             if 'etf_table' not in st.session_state:
-                st.session_state.etf_table = df[["ETF", "Current Price", "Previous Close", "Decided Quantity", "Traded Quantity", "Bought"]].copy()
+                st.session_state.etf_table = df[["ETF", "Current Price (w/ Emoji)", "Previous Close", "Decided Quantity", "Traded Quantity", "Bought"]].copy()
 
             # Show editable table
             edited_df = st.data_editor(
