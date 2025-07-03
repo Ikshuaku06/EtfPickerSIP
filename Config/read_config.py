@@ -35,6 +35,22 @@ def set_decided_quantities(qty_list):
     Config.set('ETF', 'DecidedQuantity', ','.join(str(q) for q in qty_list))
     with open('Config/config.properties', 'w') as configfile:
         Config.write(configfile)
+
+def get_traded_quantities():
+    try:
+        qty_list = get_value('ETF', 'TradedQuantity')
+        return qty_list.split(',')
+    except ValueError as e:
+        print(f"Error: {e}")
+        return None
+
+def set_traded_quantities(qty_list):
+    Config = read_config()
+    if not Config.has_section('ETF'):
+        Config.add_section('ETF')
+    Config.set('ETF', 'TradedQuantity', ','.join(str(q) for q in qty_list))
+    with open('Config/config.properties', 'w') as configfile:
+        Config.write(configfile)
     
 if __name__ == "__main__":
     etf_list = get_etf_list()
