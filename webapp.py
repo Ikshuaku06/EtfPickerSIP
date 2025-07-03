@@ -16,7 +16,7 @@ def main():
     from utilities import utils
     import pandas as pd
 
-    if choice == "View Table":
+    if choice == "View ETF tracker":
         # Prepare data for table
         data = []
         for i, etf in enumerate(etf_list):
