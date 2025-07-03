@@ -20,6 +20,14 @@ def get_etf_list():
         print(f"Error: {e}")
         return None
     
+def get_decided_quantities():
+    try:
+        qty_list = get_value('ETF', 'DecidedQuantity')
+        return qty_list.split(',')
+    except ValueError as e:
+        print(f"Error: {e}")
+        return None
+    
 if __name__ == "__main__":
     etf_list = get_etf_list()
     if etf_list:
