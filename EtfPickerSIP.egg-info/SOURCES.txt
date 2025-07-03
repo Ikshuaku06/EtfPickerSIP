@@ -1,0 +1,7 @@
+README.md
+setup.py
+EtfPickerSIP.egg-info/PKG-INFO
+EtfPickerSIP.egg-info/SOURCES.txt
+EtfPickerSIP.egg-info/dependency_links.txt
+EtfPickerSIP.egg-info/requires.txt
+EtfPickerSIP.egg-info/top_level.txt
