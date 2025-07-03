@@ -16,7 +16,8 @@ def main():
     data = []
     for etf in etf_list:
         price = utils.get_current_value(etf)
-        data.append({"ETF": etf, "Current Price": price})
+        prev_close = utils.get_previous_close(etf)
+        data.append({"ETF": etf, "Current Price": price, "Previous Close": prev_close})
 
     df = pd.DataFrame(data)
     df.index = df.index + 1  # Make index start from 1
