@@ -6,7 +6,7 @@ def get_current_value(symbol):
     Returns the latest closing price or None if not found.
     """
     try:
-        ticker = yf.Ticker(symbol)
+        ticker = yf.Ticker(symbol+".NS")
         data = ticker.history(period="1d")
         if not data.empty:
             return data['Close'].iloc[-1]

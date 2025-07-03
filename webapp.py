@@ -14,12 +14,13 @@ def main():
 
     # Prepare data for table
     data = []
-    for idx, etf in enumerate(etf_list, start=1):
+    for etf in etf_list:
         price = utils.get_current_value(etf)
-        data.append({"S.No.": idx, "ETF": etf, "Current Price": price})
+        data.append({"ETF": etf, "Current Price": price})
 
     df = pd.DataFrame(data)
-    st.table(df.reset_index(drop=True))
+    df.index = df.index + 1  # Make index start from 1
+    st.table(df)
 
 
 if __name__ == "__main__":
