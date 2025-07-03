@@ -41,7 +41,10 @@ def main():
                 color = "background-color: yellow"
             return [color if col in ["Current Price"] else "" for col in row.index]
 
-        st.dataframe(df.style.apply(highlight_price, axis=1))
+        st.dataframe(
+            df.style.apply(highlight_price, axis=1),
+            use_container_width=True
+        )
 
     elif choice == "Edit Decided Quantity":
         st.header("Edit Decided Quantity")
