@@ -28,6 +28,14 @@ def get_decided_quantities():
         print(f"Error: {e}")
         return None
     
+def set_decided_quantities(qty_list):
+    Config = read_config()
+    if not Config.has_section('ETF'):
+        Config.add_section('ETF')
+    Config.set('ETF', 'DecidedQuantity', ','.join(str(q) for q in qty_list))
+    with open('Config/config.properties', 'w') as configfile:
+        Config.write(configfile)
+    
 if __name__ == "__main__":
     etf_list = get_etf_list()
     if etf_list:
