@@ -58,7 +58,7 @@ def main():
             # Convert 'Bought' to boolean for checkbox editing
             df['Bought'] = False
 
-            # Add emoji to Current Price for display, with 2 decimal places
+            # Add emoji to Curr Price for display, with 2 decimal places
             def price_with_emoji(row):
                 try:
                     current = float(row['Current Price'])
@@ -72,7 +72,7 @@ def main():
                         return f"{current_fmt} ="
                 except:
                     return row['Current Price']
-            df['Current Price (w/ Emoji)'] = df.apply(price_with_emoji, axis=1)
+            df['Curr Price'] = df.apply(price_with_emoji, axis=1)
 
             # Add a style column for coloring Current Price
             def price_color(row):
@@ -87,11 +87,11 @@ def main():
                         return 'background-color: #fff7b3; color: #b38f00; font-weight: bold;'
                 except:
                     return ''
-            styled_df = df.style.apply(lambda x: [price_color(x)], axis=1, subset=['Current Price (w/ Emoji)'])
+            styled_df = df.style.apply(lambda x: [price_color(x)], axis=1, subset=['Curr Price'])
 
             # Use session state to persist table edits
             if 'etf_table' not in st.session_state:
-                st.session_state.etf_table = df[["ETF", "Current Price (w/ Emoji)", "Previous Close", "Decided Quantity", "Traded Quantity", "Bought"]].copy()
+                st.session_state.etf_table = df[["ETF", "Curr Price", "Previous Close", "Decided Quantity", "Traded Quantity", "Bought"]].copy()
 
             # Show editable table
             edited_df = st.data_editor(
