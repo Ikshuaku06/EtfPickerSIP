@@ -1,11 +1,33 @@
 import streamlit as st
 from datetime import datetime
 import pytz
+import os
+import json
 
 # from Config import read_config as rc
 from Config import read_config as rc
 from st_aggrid import AgGrid, GridOptionsBuilder
 import pandas as pd
+
+def load_traded_state(state_file, etf_list, traded_qty_list, today_str):
+    if os.path.exists(state_file):
+        with open(state_file, 'r') as f:
+            state = json.load(f)
+        # Check if date matches today and ETF list matches
+        if state.get('date') == today_str and state.get('etf_list') == etf_list:
+            return state['traded_qty_original'], state['traded_qty_incremented']
+    # If not found or date mismatch, reset
+    return [int(q) for q in traded_qty_list], [False] * len(etf_list)
+
+def save_traded_state(state_file, etf_list, traded_qty_original, traded_qty_incremented, today_str):
+    state = {
+        'date': today_str,
+        'etf_list': etf_list,
+        'traded_qty_original': traded_qty_original,
+        'traded_qty_incremented': traded_qty_incremented
+    }
+    with open(state_file, 'w') as f:
+        json.dump(state, f)
 
 def main():
     # Set Streamlit page config to wide mode
@@ -31,11 +53,13 @@ def main():
     if choice == "View ETF tracker":
         # --- Daily traded quantity logic ---
         today_str = now_ist.strftime('%Y-%m-%d')
-        # Load original traded quantity at the start of the day
+        state_file = os.path.join(os.path.dirname(__file__), 'traded_state.json')
+        # Load original traded quantity and incremented state from file
         if 'traded_qty_original' not in st.session_state or st.session_state.get('traded_qty_day_date') != today_str:
-            st.session_state.traded_qty_original = [int(q) for q in traded_qty_list]
+            traded_qty_original, traded_qty_incremented = load_traded_state(state_file, etf_list, traded_qty_list, today_str)
+            st.session_state.traded_qty_original = traded_qty_original
             st.session_state.traded_qty_day_date = today_str
-            st.session_state.traded_qty_incremented = [False] * len(etf_list)
+            st.session_state.traded_qty_incremented = traded_qty_incremented
 
         traded_qty = st.session_state.traded_qty_original.copy()
         incremented = st.session_state.traded_qty_incremented.copy()
@@ -54,6 +78,21 @@ def main():
                 traded_qty[i] = st.session_state.traded_qty_original[i]
                 incremented[i] = False
         st.session_state.traded_qty_incremented = incremented
+
+        # If user sets Traded Quantity to 0 via Bought checkbox, treat as manual override for the day
+        if 'etf_table' in st.session_state:
+            for i, etf in enumerate(etf_list):
+                try:
+                    manual_traded = int(st.session_state.etf_table.loc[i, 'Traded Quantity'])
+                except:
+                    continue
+                # If user manually set to 0, prevent auto-increment for the day
+                if manual_traded == 0:
+                    incremented[i] = True
+        st.session_state.traded_qty_incremented = incremented
+
+        # Persist state to file after any logic
+        save_traded_state(state_file, etf_list, traded_qty, incremented, today_str)
 
         # Use this for display and persistence
         traded_qty_list = [str(q) for q in traded_qty]
