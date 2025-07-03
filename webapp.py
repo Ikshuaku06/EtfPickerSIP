@@ -31,6 +31,35 @@ def main():
     from utilities import utils
 
     if choice == "View ETF tracker":
+        # --- Daily traded quantity logic ---
+        today_str = now_ist.strftime('%Y-%m-%d')
+        # Load original traded quantity at the start of the day
+        if 'traded_qty_original' not in st.session_state or st.session_state.get('traded_qty_day_date') != today_str:
+            st.session_state.traded_qty_original = [int(q) for q in traded_qty_list]
+            st.session_state.traded_qty_day_date = today_str
+            st.session_state.traded_qty_incremented = [False] * len(etf_list)
+
+        traded_qty = st.session_state.traded_qty_original.copy()
+        incremented = st.session_state.traded_qty_incremented.copy()
+
+        for i, etf in enumerate(etf_list):
+            try:
+                curr = float(utils.get_current_value(etf))
+                prev = float(utils.get_previous_close(etf))
+                dec = int(qty_list[i]) if qty_list and i < len(qty_list) else 0
+            except:
+                continue
+            if curr < prev and not incremented[i]:
+                traded_qty[i] += dec
+                incremented[i] = True
+            elif curr > prev and incremented[i]:
+                traded_qty[i] = st.session_state.traded_qty_original[i]
+                incremented[i] = False
+        st.session_state.traded_qty_incremented = incremented
+
+        # Use this for display and persistence
+        traded_qty_list = [str(q) for q in traded_qty]
+
         # Prepare data for table
         data = []
         for i, etf in enumerate(etf_list):
