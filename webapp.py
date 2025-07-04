@@ -126,22 +126,35 @@ def main():
                 df = df.drop(columns=["index"])
             df = df.fillna("").reset_index(drop=True)
 
+            # Format Previous Close to 2 decimals if it's a number
+            def format_prev_close(val):
+                try:
+                    return f"{float(val):.2f}"
+                except Exception:
+                    return val if val else "-"
+            df['Previous Close'] = df['Previous Close'].apply(format_prev_close)
+
             st.subheader(etf_info["name"])
             if not df.empty:
                 df['Bought'] = False
                 def price_with_emoji(row):
                     try:
                         current = float(row['Current Price'])
-                        prev = float(row['Previous Close'])
                         current_fmt = f"{current:.2f}"
+                        prev = float(row['Previous Close'])
                         if current > prev:
                             return f"{current_fmt} 📈"
                         elif current < prev:
                             return f"{current_fmt} 📉"
                         else:
                             return f"{current_fmt} ="
-                    except:
-                        return row['Current Price']
+                    except Exception:
+                        # Always try to format current price to 2 decimals if possible
+                        try:
+                            current = float(row['Current Price'])
+                            return f"{current:.2f} -"
+                        except Exception:
+                            return f"{row['Current Price']}" if row['Current Price'] else "-"
                 df['Curr Price'] = df.apply(price_with_emoji, axis=1)
                 def price_color(row):
                     try:

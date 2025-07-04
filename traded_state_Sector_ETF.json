@@ -1,1 +1,1 @@
-{"date": "2025-07-04", "etf_list": ["FMCGIETF", "FINIETF", "ITBEES", "AUTOBEES", "PHARMABEES", "JUNIORBEES"], "traded_qty_original": [0, 0, 0, 0, 0, 3, 0], "traded_qty_incremented": [true, true, true, true, true, true]}
+{"date": "2025-07-04", "etf_list": ["FMCGIETF", "FINIETF", "ITBEES", "AUTOBEES", "PHARMABEES", "JUNIORBEES"], "traded_qty_original": [0, 0, 0, 0, 0, 3, 0], "traded_qty_incremented": [false, true, false, false, false, false]}
