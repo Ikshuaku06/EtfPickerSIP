@@ -1,1 +1,1 @@
-{"date": "2025-07-04", "etf_list": ["NIFTYBEES", "BANKBEES", "HDFCSML250", "FMCGIETF", "FINIETF", "MON100", "ITBEES", "MID150BEES", "JUNIORBEES", "AUTOBEES", "PHARMABEES"], "traded_qty_original": [0, 0, 0, 0, 20, 0, 3, 20, 2, 0, 0], "traded_qty_incremented": [false, false, false, false, true, false, false, true, false, false, false]}
+{"date": "2025-07-04", "etf_list": ["NIFTYBEES", "BANKBEES", "HDFCSML250", "MON100", "MID150BEES"], "traded_qty_original": [0, 0, 0, 0, 0], "traded_qty_incremented": [false, false, true, false, true]}
