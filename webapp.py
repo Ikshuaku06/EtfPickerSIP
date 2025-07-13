@@ -35,6 +35,11 @@ def main():
     # Set Streamlit page config to wide mode
     st.set_page_config(layout="wide")
 
+    # Switch to tracker view after save, before rendering selectbox
+    if st.session_state.get("switch_to_tracker", False):
+        st.session_state["nav_choice"] = "View ETF tracker"
+        st.session_state["switch_to_tracker"] = False
+
     # Show current date in IST at the top, centered and only date
     ist = pytz.timezone('Asia/Kolkata')
     now_ist = datetime.now(ist)
@@ -212,8 +217,7 @@ def main():
                     new_qty.append(val)
                 if st.button(f"Save Quantities for {etf_info['name']}", key=f"save_qty_{section}"):
                     rc.set_decided_quantities(new_qty, section)
-                    st.success(f"Decided quantities updated for {etf_info['name']}!")
-                    raise RerunException(get_script_run_ctx())
+                    st.success(f"Decided quantities updated for {etf_info['name']}! Please refresh the page to see updated values in the tracker.")
 
 
 if __name__ == "__main__":
